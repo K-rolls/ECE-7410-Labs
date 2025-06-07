@@ -1,25 +1,18 @@
-% filepath: /home/krolls/_MUN/ECE-7410/labs/L1/question3.m
-
 % Load the image
 imc = imread("~/_MUN/ECE-7410/labs/L1/im3.png");
 
 % Convert to grayscale
 img = rgb2gray(imc);
 
-% Display the original image
-figure;
-imshow(img);
-title('Original Image');
-
 % Rotate the image by 90 degrees using custom code from question1.m
-tic; % Start timing
-theta = -90 * (pi / 180);
+theta = pi/2;
 
 % Transformation matrix for rotation
 R = [cos(theta) sin(theta) 0;
     -sin(theta) cos(theta) 0;
     0           0          1];
 
+tic; % Start timing
 [y_max, x_max] = size(img); % Obtaining the size of the image
 
 corners = [0, 0, 1;
@@ -46,26 +39,37 @@ for i = 1:y_max
 end
 custom_time = toc; % End timing
 
-% Display the rotated image using custom code
-figure;
-imshow(rot_img_custom, []);
-title('Rotated Image (Custom Code)');
-
 % Rotate the image by 90 degrees using inbuilt functions
+rot_angle = pi/2;
 tic; % Start timing
-tform = affine2d([cos(theta) sin(theta) 0; -sin(theta) cos(theta) 0; 0 0 1]);
-% Create appropriate output view for 90-degree rotation (swap width and height)
-outputView = imref2d([y_max, x_max]);  % Swap dimensions for 90-degree rotation
-[rot_img_inbuilt, RB] = imwarp(img, tform, 'OutputView', outputView, 'FillValues', 0);
+% Create the transformation matrix using maketform
+tform = maketform('affine', R);
+% Apply the transformation using imtransform      
+rot_img_inbuilt = imtransform(img, tform);
 inbuilt_time = toc; % End timing
 
 % Display the rotated image using inbuilt functions
 figure;
+subplot(2, 2, 1);
+imshow(imc,[]);
+title('Original Image');
+
+subplot(2, 2, 2);
 imshow(rot_img_inbuilt, []);
 title('Rotated Image (Inbuilt Function)');
+text(size(rot_img_inbuilt,2)-100, size(rot_img_inbuilt,1)-20, sprintf('Time: %.4f sec', inbuilt_time), 'Color', 'white', 'FontSize', 8, 'BackgroundColor', [0 0 0 0.5]);
 
-% Save the image to the current directory
-imwrite(rot_img_inbuilt, 'text.png');
+subplot(2, 2, 3);
+imshow(rot_img_custom, []);
+title('Rotated Image (Custom Code)');
+text(size(rot_img_custom,2)-100, size(rot_img_custom,1)-20, sprintf('Time: %.4f sec', custom_time), 'Color', 'white', 'FontSize', 8, 'BackgroundColor', [0 0 0 0.5]);
+
+subplot(2, 2, 4);
+bar([custom_time, inbuilt_time]);
+set(gca, 'xticklabel', {'Custom Code', 'Inbuilt Function'});
+title('Performance Comparison');
+ylabel('Time (seconds)');
+grid on;
 
 % Compare the speed
 fprintf('Time taken using custom code: %.4f seconds\n', custom_time);
