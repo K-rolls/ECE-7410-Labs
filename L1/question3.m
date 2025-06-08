@@ -1,10 +1,10 @@
 % Load the image
-imc = imread("~/_MUN/ECE-7410/labs/L1/im3.png");
+imc = imread("./L1/im3.png");
 
 % Convert to grayscale
 img = rgb2gray(imc);
 
-% Rotate the image by 90 degrees using custom code from question1.m
+% Rotate the image by 90 degrees
 theta = pi/2;
 
 % Transformation matrix for rotation
@@ -13,7 +13,7 @@ R = [cos(theta) sin(theta) 0;
     0           0          1];
 
 function [rot_img] = rotate_image(img, R)
-    % Function to rotate an image using a transformation matrix
+    % Rotate image `img` using the transformation matrix `R`
     [y_max, x_max] = size(img);
     fprintf('Image size: %d x %d\n', y_max, x_max);
     corners = [0, 0, 1;
@@ -41,8 +41,8 @@ function [rot_img] = rotate_image(img, R)
 end
 
 tic; % Start timing
-rot_img_custom = rotate_image(img, R); % Rotate using custom code
-custom_time = toc; % End timing
+rot_img_custom = rotate_image(img, R);
+custom_time = toc;
 
 % Rotate the image by 90 degrees using inbuilt functions
 tic; % Start timing
