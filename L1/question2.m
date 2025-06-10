@@ -1,6 +1,12 @@
 imc = imread('im2.png'); % Read the image
 img = rgb2gray(imc); % Convert to grayscale
 imshow(img); % View image
+
+% Ensure directory exists
+if ~exist('./L1/report', 'dir')
+    mkdir('./L1/report');
+end
+
 imwrite(img, 'L1/report/img2_gray.png'); % Save the grayscale image
 
 H = size(img, 1); % Read the height of the image
