@@ -4,13 +4,10 @@ imc = imread("./L1/im3.png");
 % Convert to grayscale
 img = rgb2gray(imc);
 
-% Rotate the image by 90 degrees
-theta = pi / 2;
-
-% Transformation matrix for rotation
-R = [cos(theta) sin(theta) 0;
-     -sin(theta) cos(theta) 0;
-     0 0 1];
+% Ensure directory exists
+if ~exist('./L1/report', 'dir')
+    mkdir('./L1/report');
+end
 
 function [rot_img] = rotate_image(img, R)
     % Rotate image `img` using the transformation matrix `R`
@@ -40,6 +37,14 @@ function [rot_img] = rotate_image(img, R)
         end
     end
 end
+
+% Rotate the image by 90 degrees
+theta = pi / 2;
+
+% Transformation matrix for rotation
+R = [cos(theta) sin(theta) 0;
+     -sin(theta) cos(theta) 0;
+     0 0 1];
 
 tic; % Start timing
 rot_img_custom = rotate_image(img, R);
