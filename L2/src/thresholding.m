@@ -67,17 +67,31 @@ function binary_img = grayscale_to_binary(img, threshold)
         img = rgb2gray(img);
     end
 
-    % Convert to double
+    % Convert to double for calculations
     img = double(img);
 
-    % Apply threshold
-    binary_img = img > threshold;
+    % Get image dimensions
+    [rows, cols] = size(img);
 
-    % Convert to uint8 for display (0 or 255)
-    binary_img = uint8(binary_img * 255);
+    % Initialize binary image
+    binary_img = zeros(rows, cols);
+
+    % Apply threshold manually using loops
+    for i = 1:rows
+        for j = 1:cols
+            if img(i, j) > threshold
+                binary_img(i, j) = 255; % White pixel
+            else
+                binary_img(i, j) = 0; % Black pixel
+            end
+        end
+    end
+
+    % Convert to uint8
+    binary_img = uint8(binary_img);
 end
 
-%% Step 5: Generate and save binary images using optimal thresholds
+%% Q5: Generate and save binary images using optimal thresholds
 % Create output directory
 if ~exist('./L2/outputs/03_thresholding', 'dir')
     mkdir('./L2/outputs/03_thresholding');
