@@ -1,40 +1,122 @@
-% Spatial and Median Filtering of Image
+% ECE 7410 - Laboratory 2: Spatial Filtering
 
-% Step 1: Read img1 and convert to grayscale
-img1 = imread('img1.png');
+%% Q1.2: Read img1 and convert to grayscale
+% Create output directory
+if ~exist('./L2/outputs/01_smoothing', 'dir')
+    mkdir('./L2/outputs/01_smoothing');
+end
+
+% Read image
+img1 = imread('./L2/img1.png');
 img1_gray = rgb2gray(img1);
 
-% Display original grayscale image
-figure;
-imshow(img1_gray);
-title('Original Grayscale Image');
+% Save the grayscale image
+imwrite(img1_gray, './L2/outputs/01_smoothing/img1_grey.png');
 
-% Step 2: Define Kernels
+%% Q1.3 Function: Custom Spatial Filtering
+function output = my_filter2D(img, kernel)
+    % Convert inputs to double for calculations
+    img = double(img);
+    kernel = double(kernel);
+
+    % Get image and kernel dimensions
+    [M, N] = size(img);
+    [m, n] = size(kernel);
+
+    % Calculate padding needed (zero padding)
+    pad_m = floor(m / 2);
+    pad_n = floor(n / 2);
+
+    % Zero pad the image
+    padded_image = zeros(M + 2 * pad_m, N + 2 * pad_n);
+    padded_image(pad_m + 1:M + pad_m, pad_n + 1:N + pad_n) = img;
+
+    % Initialize output image
+    output = zeros(M, N);
+
+    % Perform convolution
+    for i = 1:M
+        for j = 1:N
+            % Extract region from padded image
+            region = padded_image(i:i + m - 1, j:j + n - 1);
+            % Apply convolution (element-wise multiplication and sum)
+            output(i, j) = sum(sum(region .* kernel));
+        end
+    end
+
+    % Convert back to uint8 and clamp values to [0, 255]
+    output = uint8(max(0, min(255, output)));
+end
+
+%% Q1.4: Apply spatial filters
+% Define Kernels
 kernel1 = (1/9) * ones(3);
 kernel2 = (1/49) * ones(7);
 kernel3 = fspecial('average', [7, 7]);
 kernel4 = fspecial('gaussian', [3, 3], 0.5);
 kernel5 = fspecial('gaussian', [7, 7], 1.2);
 
-% Step 3: Apply spatial filters
+% Apply spatial filters
 filtered1 = my_filter2D(img1_gray, kernel1);
 filtered2 = my_filter2D(img1_gray, kernel2);
 filtered3 = my_filter2D(img1_gray, kernel3);
 filtered4 = my_filter2D(img1_gray, kernel4);
 filtered5 = my_filter2D(img1_gray, kernel5);
 
-% Step 4: Apply custom median filters
+% Save filtered images
+% Create kernel output directory
+if ~exist('./L2/outputs/01_smoothing/04', 'dir')
+    mkdir('./L2/outputs/01_smoothing/04');
+end
+
+imwrite(filtered1, './L2/outputs/01_smoothing/04/kernel1.png');
+imwrite(filtered2, './L2/outputs/01_smoothing/04/kernel2.png');
+imwrite(filtered3, './L2/outputs/01_smoothing/04/kernel3.png');
+imwrite(filtered4, './L2/outputs/01_smoothing/04/kernel4.png');
+imwrite(filtered5, './L2/outputs/01_smoothing/04/kernel5.png');
+
+%% Q1.5 Function: Custom Median Filtering
+function output = my_median_filter(img, kernel_size)
+    % Convert to double for calculations
+    img = double(img);
+
+    % Get image dimensions
+    [M, N] = size(img);
+
+    % Calculate padding needed (zero padding)
+    pad = floor(kernel_size / 2);
+
+    % Zero pad the image manually
+    padded_image = zeros(M + 2 * pad, N + 2 * pad);
+    padded_image(pad + 1:M + pad, pad + 1:N + pad) = img;
+
+    % Initialize output image
+    output = zeros(M, N);
+
+    % Perform median filtering
+    for i = 1:M
+        for j = 1:N
+            % Extract region from padded image
+            region = padded_image(i:i + kernel_size - 1, j:j + kernel_size - 1);
+            % Calculate median of the region
+            output(i, j) = median(region(:));
+        end
+    end
+
+    % Convert back to uint8
+    output = uint8(output);
+end
+
+%% Q1.6 Apply custom median filters
 filtered_median_3 = my_median_filter(img1_gray, 3);
 filtered_median_5 = my_median_filter(img1_gray, 5);
 
-% Step 5: Display each filtered image in separate figures
-figure; imshow(filtered1); title('Filtered with Kernel 1: (1/9) * ones(3)');
-figure; imshow(filtered2); title('Filtered with Kernel 2: (1/49) * ones(7)');
-figure; imshow(filtered3); title('Filtered with Kernel 3: fspecial average (7x7)');
-figure; imshow(filtered4); title('Filtered with Kernel 4: fspecial gaussian (3x3, 0.5)');
-figure; imshow(filtered5); title('Filtered with Kernel 5: fspecial gaussian (7x7, 1.2)');
-figure; imshow(filtered_median_3); title('Median Filtered (3x3)');
-figure; imshow(filtered_median_5); title('Median Filtered (5x5)');
+% Save median filtered images
+if ~exist('./L2/outputs/01_smoothing/06', 'dir')
+    mkdir('./L2/outputs/01_smoothing/06');
+end
+imwrite(filtered_median_3, './L2/outputs/01_smoothing/06/median3.png');
+imwrite(filtered_median_5, './L2/outputs/01_smoothing/06/median5.png');
 
 % Step 6: Show all results in one subplot figure
 figure;
@@ -47,39 +129,41 @@ subplot(2, 4, 6); imshow(filtered5); title('gaussian (7x7, 1.2)');
 subplot(2, 4, 7); imshow(filtered_median_3); title('Median (3x3)');
 subplot(2, 4, 8); imshow(filtered_median_5); title('Median (5x5)');
 
+%% Q2: Sharpening and Edge Detection
+% Read img2 and convert to grayscale
+img2 = imread('./L2/img2.png');
+img2_gray = rgb2gray(img2);
 
-% --- Function: Custom 2D Filtering ---
-function output = my_filter2D(image, kernel)
-    image = double(image);
-    kernel = double(kernel);
-    [M, N] = size(image);
-    [m, n] = size(kernel);
-    pad_m = floor(m / 2);
-    pad_n = floor(n / 2);
-    padded_image = padarray(image, [pad_m, pad_n], 0, 'both');
-    kernel = rot90(kernel, 2);  % Flip kernel for convolution
-    output = zeros(M, N);
-    for i = 1:M
-        for j = 1:N
-            region = padded_image(i:i+m-1, j:j+n-1);
-            output(i, j) = sum(sum(region .* kernel));
-        end
-    end
-    output = uint8(output);
+% Create output directory for sharpening
+if ~exist('./L2/outputs/02_sharpening', 'dir')
+    mkdir('./L2/outputs/02_sharpening');
 end
 
-% --- Function: Custom Median Filtering ---
-function output = my_median_filter(image, kernel_size)
-    image = double(image);
-    [M, N] = size(image);
-    pad = floor(kernel_size / 2);
-    padded_image = padarray(image, [pad, pad], 0, 'both');
-    output = zeros(M, N);
-    for i = 1:M
-        for j = 1:N
-            region = padded_image(i:i+2*pad, j:j+2*pad);
-            output(i, j) = median(region(:));
-        end
-    end
-    output = uint8(output);
-end
+% Save the grayscale image
+imwrite(img2_gray, './L2/outputs/02_sharpening/img2_grey.png');
+
+% Define sharpening kernels
+kernel6 = [
+           -1, 0, 1;
+           -2, 0, 2;
+           -1, 0, 1
+           ];
+kernel7 = [-1, -2, -1; 0, 0, 0; 1, 2, 1];
+kernel8 = fspecial('log', 3);
+
+% Apply sharpening filters using the custom function
+filtered6 = my_filter2D(img2_gray, kernel6);
+filtered7 = my_filter2D(img2_gray, kernel7);
+filtered8 = my_filter2D(img2_gray, kernel8);
+
+% Save sharpening filtered images
+imwrite(filtered6, './L2/outputs/02_sharpening/kernel6.png');
+imwrite(filtered7, './L2/outputs/02_sharpening/kernel7.png');
+imwrite(filtered8, './L2/outputs/02_sharpening/kernel8.png');
+
+% Display sharpening results
+figure;
+subplot(2, 2, 1); imshow(img2_gray); title('Original img2 Grayscale');
+subplot(2, 2, 2); imshow(filtered6); title('Kernel 6 (Vertical Edge)');
+subplot(2, 2, 3); imshow(filtered7); title('Kernel 7 (Horizontal Edge)');
+subplot(2, 2, 4); imshow(filtered8); title('Kernel 8 (Laplacian of Gaussian)');
