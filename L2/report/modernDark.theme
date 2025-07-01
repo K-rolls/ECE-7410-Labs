@@ -1,0 +1,237 @@
+{
+  "name": "vim-code-dark",
+  "version": "1.0",
+  "author": "tomasiser",
+  "description": "Pandoc highlight theme based on vim-code-dark (VS Code Dark+) theme",
+  "license": "MIT",
+  "text-color": "#d4d4d4",
+  "background-color": "#1e1e1e",
+  "line-number-color": "#858585",
+  "line-number-background-color": "#1e1e1e",
+  "text-styles": {
+    "Alert": {
+      "text-color": "#ff6b68",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Annotation": {
+      "text-color": "#6a9955",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Attribute": {
+      "text-color": "#9cdcfe",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "BaseN": {
+      "text-color": "#b5cea8",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Boolean": {
+      "text-color": "#569cd6",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Character": {
+      "text-color": "#d69d85",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "CharVector": {
+      "text-color": "#d69d85",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Comment": {
+      "text-color": "#6a9955",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Constructor": {
+      "text-color": "#4ec9b0",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Constant": {
+      "text-color": "#4fc1ff",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "ControlFlow": {
+      "text-color": "#c586c0",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "DataType": {
+      "text-color": "#4ec9b0",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Default": {
+      "text-color": "#d4d4d4",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Delimiter": {
+      "text-color": "#d4d4d4",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Error": {
+      "text-color": "#f44747",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Float": {
+      "text-color": "#b5cea8",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Function": {
+      "text-color": "#dcdcaa",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Incomplete CharVector": {
+      "text-color": "#f44747",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Incomplete String": {
+      "text-color": "#f44747",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Keyword": {
+      "text-color": "#c586c0",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Namespace": {
+      "text-color": "#4ec9b0",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Normal Text": {
+      "text-color": "#d4d4d4",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Number": {
+      "text-color": "#b5cea8",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Operator": {
+      "text-color": "#d4d4d4",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Preprocessor": {
+      "text-color": "#c586c0",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "SpecialChar": {
+      "text-color": "#d69d85",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "SpecialString": {
+      "text-color": "#d69d85",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "String": {
+      "text-color": "#d69d85",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Strong": {
+      "text-color": null,
+      "background-color": null,
+      "bold": true,
+      "italic": false,
+      "underline": false
+    },
+    "System": {
+      "text-color": "#b5cea8",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Variable": {
+      "text-color": "#9cdcfe",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    },
+    "Warning": {
+      "text-color": "#ffcc02",
+      "background-color": null,
+      "bold": false,
+      "italic": false,
+      "underline": false
+    }
+  }
+}

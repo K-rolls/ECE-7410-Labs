@@ -34,12 +34,12 @@ function output = my_filter2D(img, kernel)
     % Initialize output image
     output = zeros(M, N);
 
-    % Perform convolution
+    % Perform spatial filtering
     for i = 1:M
         for j = 1:N
             % Extract region from padded image
             region = padded_image(i:i + m - 1, j:j + n - 1);
-            % Apply convolution (element-wise multiplication and sum)
+            % Apply spatial filtering: (element-wise multiplication and sum)
             output(i, j) = sum(sum(region .* kernel));
         end
     end
@@ -143,11 +143,7 @@ end
 imwrite(img2_gray, './L2/outputs/02_sharpening/img2_grey.png');
 
 % Define sharpening kernels
-kernel6 = [
-           -1, 0, 1;
-           -2, 0, 2;
-           -1, 0, 1
-           ];
+kernel6 = [-1, 0, 1; -2, 0, 2; -1, 0, 1];
 kernel7 = [-1, -2, -1; 0, 0, 0; 1, 2, 1];
 kernel8 = fspecial('log', 3);
 
@@ -156,14 +152,26 @@ filtered6 = my_filter2D(img2_gray, kernel6);
 filtered7 = my_filter2D(img2_gray, kernel7);
 filtered8 = my_filter2D(img2_gray, kernel8);
 
-% Save sharpening filtered images
+% Apply filters to sharpen the original image
+% Convert to double for arithmetic operations and clamp results
+sharpened_img6 = uint8(max(0, min(255, double(img2_gray) + double(filtered6))));
+sharpened_img7 = uint8(max(0, min(255, double(img2_gray) + double(filtered7))));
+sharpened_img8 = uint8(max(0, min(255, double(img2_gray) - double(filtered8))));
+
+% Save sharpening filtered images and sharpened results
 imwrite(filtered6, './L2/outputs/02_sharpening/kernel6.png');
 imwrite(filtered7, './L2/outputs/02_sharpening/kernel7.png');
 imwrite(filtered8, './L2/outputs/02_sharpening/kernel8.png');
+imwrite(sharpened_img6, './L2/outputs/02_sharpening/sharpened6.png');
+imwrite(sharpened_img7, './L2/outputs/02_sharpening/sharpened7.png');
+imwrite(sharpened_img8, './L2/outputs/02_sharpening/sharpened8.png');
 
 % Display sharpening results
 figure;
-subplot(2, 2, 1); imshow(img2_gray); title('Original img2 Grayscale');
-subplot(2, 2, 2); imshow(filtered6); title('Kernel 6 (Vertical Edge)');
-subplot(2, 2, 3); imshow(filtered7); title('Kernel 7 (Horizontal Edge)');
-subplot(2, 2, 4); imshow(filtered8); title('Kernel 8 (Laplacian of Gaussian)');
+subplot(3, 3, 1); imshow(img2_gray); title('Original img2 Grayscale');
+subplot(3, 3, 2); imshow(filtered6); title('Kernel 6 (Vertical Edge)');
+subplot(3, 3, 3); imshow(filtered7); title('Kernel 7 (Horizontal Edge)');
+subplot(3, 3, 4); imshow(filtered8); title('Kernel 8 (Laplacian of Gaussian)');
+subplot(3, 3, 5); imshow(sharpened_img6); title('Sharpened with Kernel 6');
+subplot(3, 3, 6); imshow(sharpened_img7); title('Sharpened with Kernel 7');
+subplot(3, 3, 7); imshow(sharpened_img8); title('Sharpened with Kernel 8');
