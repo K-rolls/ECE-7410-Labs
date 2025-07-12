@@ -1,0 +1,165 @@
+$passoptions.latex()$
+\documentclass[
+$for(babel-otherlangs)$
+  $babel-otherlangs$,
+$endfor$
+$if(babel-lang)$
+  $babel-lang$,
+$endif$
+$if(fontsize)$
+  $fontsize$,
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$endif$
+$for(classoption)$
+  $classoption$$sep$,
+$endfor$
+]{$documentclass$}
+
+\usepackage{xcolor}
+\usepackage{titling}
+\usepackage{etoolbox}
+\usepackage{hyperref}
+$hypersetup.latex()$
+\usepackage{amsmath,amssymb}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+
+$fonts.latex()$
+$font-settings.latex()$
+$common.latex()$
+$for(header-includes)$
+$header-includes$
+$endfor$
+$after-header-includes.latex()$
+
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{-\maxdimen}
+$endif$
+
+%--------------------------------------------------
+% Metadata variables
+%--------------------------------------------------
+$if(title)$
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
+$if(subtitle)$
+\makeatletter
+\providecommand{\subtitle}[1]{%
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}%
+}
+\makeatother
+\subtitle{$subtitle$}
+$endif$
+\author{$for(author)$$author$$sep$\\ $endfor$}
+\date{$date$}
+
+%--------------------------------------------------
+\begin{document}
+$if(has-frontmatter)$
+\frontmatter
+$endif$
+
+% — Simple title page variant —
+\makeatletter
+$if(title)$
+  $if(titlepage)$
+    \begin{titlepage}
+      \centering
+      \vspace*{4cm}
+      {\LARGE\bfseries\@title\par}
+      \vspace{0.5cm}
+      {\large\@author\par}
+      \vspace{0.3cm}
+      $if(course)$
+        {\normalsize\textit{$course$}\par}
+        \vspace{0.2cm}
+      $endif$
+      $if(institution)$
+        {\normalsize\textit{$institution$}\par}
+        \vspace{1.5cm}
+      $endif$
+      {\@date\par}
+      \vspace*{\fill}
+      \thispagestyle{empty}
+    \end{titlepage}
+    \clearpage
+  $else$
+    \maketitle
+    $if(course)$
+      \begin{center}\textit{$course$}\end{center}
+    $endif$
+    $if(institution)$
+      \begin{center}\textit{$institution$}\end{center}
+      \vspace{1em}
+    $endif$
+  $endif$
+$endif$
+\makeatother
+% — end title page —
+
+$for(include-before)$
+$include-before$
+$endfor$
+
+$if(toc)$
+  $if(toc-title)$
+    \renewcommand*\contentsname{$toc-title$}
+  $endif$
+  {
+    $if(colorlinks)$
+      \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+    $endif$
+    \setcounter{tocdepth}{$toc-depth$}
+    \tableofcontents
+  }
+$endif$
+
+$if(lof)$
+\listoffigures
+$endif$
+$if(lot)$
+\listoftables
+$endif$
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+$if(has-frontmatter)$
+\mainmatter
+$endif$
+
+$body$
+
+$if(has-frontmatter)$
+\backmatter
+$endif$
+$if(nocite-ids)$
+\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+
+$if(natbib)$
+  $if(bibliography)$
+    $if(biblio-title)$
+      $if(has-chapters)$
+        \renewcommand\bibname{$biblio-title$}
+      $else$
+        \renewcommand\refname{$biblio-title$}
+      $endif$
+    $endif$
+    \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+  $endif$
+$endif$
+
+$if(biblatex)$
+  \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+$endif$
+
+$for(include-after)$
+$include-after$
+$endfor$
+
+\end{document}
