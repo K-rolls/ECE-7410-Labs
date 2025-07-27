@@ -6,8 +6,15 @@ while inotifywait -e modify ./L4.md; do
         -o G10.pdf \
         --pdf-engine=pdflatex \
         --filter pandoc-plot \
+        --filter pandoc-include \
         --highlight-style tango.theme \
-        --template=theme.tex
+        --mathjax \
+        --template=theme.tex \
+        --from markdown+tex_math_dollars+tex_math_double_backslash+raw_tex \
+        --to pdf \
+        -V header-includes="\usepackage{amsmath,amssymb,amsfonts}" \
+        2>pandoc_warnings.log
 
-    echo "PDF generated: G10.pdf"
-done
+    echo "PDF generated: ECE7600_A2.pdf"
+done 
+
